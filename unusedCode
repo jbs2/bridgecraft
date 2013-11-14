@@ -1,0 +1,324 @@
+
+// load a 256x256 RGB .RAW file as a texture
+/*GLuint LoadTextureRAW( const char * filename, int wrap, int xsize, int ysize ) {
+	GLuint texture;
+	int width, height;
+	BYTE * data;
+	FILE * file;
+	// open texture data
+	file = fopen( filename, "rb" );
+	if ( file == NULL ) return 0;
+	// allocate buffer
+	width = xsize;
+	height = ysize;
+	data = (BYTE*)malloc( width * height * 3 );
+	// read texture data
+	fread( data, width * height * 3, 1, file );
+	fclose( file );
+	// allocate a texture name
+	glGenTextures( 1, &texture );
+	// select our current texture
+	glBindTexture( GL_TEXTURE_2D, texture );
+	// select modulate to mix texture with color for shading
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+	// when texture area is small, bilinear filter the closest mipmap
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	GL_LINEAR_MIPMAP_NEAREST );
+	// when texture area is large, bilinear filter the first mipmap
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	// if wrap is true, the texture wraps over at the edges (repeat)
+	//       ... false, the texture ends at the edges (clamp)
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+	wrap ? GL_REPEAT : GL_CLAMP );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+	wrap ? GL_REPEAT : GL_CLAMP );
+	// build our texture mipmaps
+	gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,
+	GL_RGB, GL_UNSIGNED_BYTE, data );
+	// free buffer
+	free( data );
+	return texture;
+}*/
+
+/*	if(bridge->tto) {
+		mySelect(MousePt.s.X, MousePt.s.Y, (int)wwidth, (int)wheight);
+		bridge->tto->p.x = mpx;
+		bridge->tto->p.y = mpy;
+	}
+	else {
+		if(bridge->tfrom && (bridge->tfrom->p.x != MousePt.s.X || bridge->tfrom->p.y != MousePt.s.Y)) {
+			mySelect(MousePt.s.X, MousePt.s.Y, (int)wwidth, (int)wheight);
+			bridge->tto = new Node();
+			bridge->tto->set(mpx, mpy);
+			bridge->addEdge(0.2f,bridge->tfrom->p.x,bridge->tfrom->p.y,bridge->tto->p.x,bridge->tto->p.y);
+		}
+	}	*/
+
+
+/*void Timber(float length, float width) {
+	float ir=width/(float)2;
+	float il=length/(float)2;
+	glBegin(GL_TRIANGLES);
+		for(int z=-1; z<2; z+=2) {
+			for(int i=-1; i<2; i+=2) {
+				glNormal3f(0,0,z);
+				glVertex3f(-i*ir,i*ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(-ir,-ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(ir,ir,il*z);
+
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,i*ir,il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,-ir,i*il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,ir,-il*z);
+
+				glNormal3f(0,z,0);
+				glVertex3f(i*ir,z*ir,il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(-ir,z*ir,i*il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(ir,z*ir,-il*z);
+            }
+		}
+	glEnd();
+}*/
+
+
+/*void Timber2(float width, float fromX, float fromY, float fromZ, float toX, float toY, float toZ) {
+	Tuple3fT from;	from.s.X=fromX; from.s.Y=fromY; from.s.Z=fromZ;
+	Tuple3fT to;	to.s.X=toX;		to.s.Y=toY;		to.s.Z=toZ;
+	Tuple3fT direction=sub(from,to);
+//	float length=sqrt(pow(fromX-toX,2)+pow(fromY-toY,2)+pow(fromZ-toZ,2));
+	float dl=length(direction);
+	float ir=width/(float)2;
+	float il=dl/(float)2;
+	
+	float znormal=sqrt(pow(fromX-toX,2)+pow(fromY-toY,2));
+	float ynormal=sqrt(pow(fromX-toX,2)+pow(fromZ-toZ,2));
+	float xnormal=sqrt(pow(fromY-toY,2)+pow(fromZ-toZ,2));
+	
+	glBegin(GL_TRIANGLES);
+		int z=-1;
+			int i=-1;
+				glNormal3f(0,0,-1);
+				glVertex3f(ir+from.s.X,-ir+from.s.Y,from.s.Z);
+				glNormal3f(0,0,-1);
+				glVertex3f(-ir+from.s.X,-ir+from.s.Y,from.s.Z);
+				glNormal3f(0,0,-1);
+				glVertex3f(ir+from.s.X,ir+from.s.Y,from.s.Z);
+
+                glNormal3f(-1,0,0);
+                glVertex3f(-ir+from.s.X,-ir+from.s.Y,from.s.Z);
+                glNormal3f(-1,0,0);
+                glVertex3f(-ir+from.s.X,-ir+from.s.Y,to.s.Z);
+                glNormal3f(z,0,0);
+                glVertex3f(-ir+from.s.X,ir+from.s.Y,to.s.Z);
+
+				glNormal3f(0,-1,0);
+				glVertex3f(-ir,-ir,-il);
+				glNormal3f(0,-1,0);
+				glVertex3f(-ir,-ir,il);
+				glNormal3f(0,-1,0);
+				glVertex3f(ir,-ir,il);
+			i=1;
+				glNormal3f(xnormal,ynormal,znormal);
+				glVertex3f(-i*ir,i*ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(-ir,-ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(ir,ir,il*z);
+
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,i*ir,il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,-ir,i*il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,ir,-il*z);
+
+				glNormal3f(0,z,0);
+				glVertex3f(i*ir,z*ir,il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(-ir,z*ir,i*il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(ir,z*ir,-il*z);
+
+		 z=1;
+			i=-1;
+				glNormal3f(xnormal,ynormal,znormal);
+				glVertex3f(-i*ir,i*ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(-ir,-ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(ir,ir,il*z);
+
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,i*ir,il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,-ir,i*il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,ir,-il*z);
+
+				glNormal3f(0,z,0);
+				glVertex3f(i*ir,z*ir,il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(-ir,z*ir,i*il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(ir,z*ir,-il*z);
+			i=1;
+				glNormal3f(xnormal,ynormal,znormal);
+				glVertex3f(-i*ir,i*ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(-ir,-ir,il*z);
+				glNormal3f(0,0,z);
+				glVertex3f(ir,ir,il*z);
+
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,i*ir,il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,-ir,i*il*z);
+                glNormal3f(z,0,0);
+                glVertex3f(z*ir,ir,-il*z);
+
+				glNormal3f(0,z,0);
+				glVertex3f(i*ir,z*ir,il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(-ir,z*ir,i*il*z);
+				glNormal3f(0,z,0);
+				glVertex3f(ir,z*ir,-il*z);
+	glEnd();
+}*/
+
+/*void Timber3(float width, float fromX, float fromY, float toX, float toY) {
+	float ir=width/(float)2;
+	glBegin(GL_TRIANGLES);
+
+		// If it's too slow, leave these 4 triangles away
+		// 4 triangles to model the two caps
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY+ir,-ir);
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY+ir,ir);
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY-ir,ir);
+
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY-ir,ir);
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY-ir,-ir);
+		glNormal3f(-1,0,0);
+		glVertex3f(fromX,fromY+ir,-ir);
+
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY+ir,-ir);
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY+ir,ir);
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY-ir,ir);
+
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY-ir,ir);
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY-ir,-ir);
+		glNormal3f(1,0,0);
+		glVertex3f(toX,toY+ir,-ir);
+
+		// 4 triangles for 2 sides
+		glNormal3f(0,0,1);
+		glVertex3f(fromX,fromY+ir,ir);
+		glNormal3f(0,0,1);
+		glVertex3f(fromX,fromY-ir,ir);
+		glNormal3f(0,0,1);
+		glVertex3f(toX,toY+ir,ir);
+
+		glNormal3f(0,0,1);
+		glVertex3f(fromX,fromY-ir,ir);
+		glNormal3f(0,0,1);
+		glVertex3f(toX,toY+ir,ir);
+		glNormal3f(0,0,1);
+		glVertex3f(toX,toY-ir,ir);
+
+		glNormal3f(0,0,-1);
+		glVertex3f(fromX,fromY+ir,-ir);
+		glNormal3f(0,0,-1);
+		glVertex3f(fromX,fromY-ir,-ir);
+		glNormal3f(0,0,-1);
+		glVertex3f(toX,toY+ir,-ir);
+
+		glNormal3f(0,0,-1);
+		glVertex3f(fromX,fromY-ir,-ir);
+		glNormal3f(0,0,-1);
+		glVertex3f(toX,toY+ir,-ir);
+		glNormal3f(0,0,-1);
+		glVertex3f(toX,toY-ir,-ir);
+
+		// Schiefe Ebene
+//		Tuple3fT from;	from.s.X=fromX;	from.s.Y=fromY; from.s.Z=0;
+//		Tuple3fT to;	to.s.X=toX;		to.s.Y=toY;		to.s.Z=0;
+		Tuple3fT a; a.s.X=fromX-toX; a.s.Y=fromY-toY; a.s.Z=0;
+		Tuple3fT b; b.s.X=0; b.s.Y=0; b.s.Z=-1;
+		Tuple3fT normal;
+		Vector3fCross(&normal, &a, &b);
+		GLfloat l=Vector3fLength(&normal);
+		normal.s.X=normal.s.X/l; normal.s.Y=normal.s.Y/l; normal.s.Z=normal.s.Z/l;
+		
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(fromX,fromY-ir,-ir);
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(fromX,fromY-ir,ir);
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(toX,toY-ir,ir);
+
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(fromX,fromY-ir,-ir);
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(toX,toY-ir,ir);
+		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
+		glVertex3f(toX,toY-ir,-ir);
+
+
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(fromX,fromY+ir,-ir);
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(fromX,fromY+ir,ir);
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(toX,toY+ir,ir);
+
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(fromX,fromY+ir,-ir);
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(toX,toY+ir,ir);
+		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
+		glVertex3f(toX,toY+ir,-ir);
+
+	glEnd();
+}*/
+
+/*void Bridge::click2(unsigned int cx, unsigned int cy) {
+    float x = (float)cx - 24.0f;
+    float y = (float)cy - 13.0f;
+    if(!tfrom) {
+        Node* near = new Node();
+        near->set(x,y);
+//      findOrCreateNode1(&near,x,y);
+        tfrom=near;
+    }
+    else {
+        if(x != tfrom->p.x || y != tfrom->p.y) {
+            addEdge(0.2f,tfrom->p.x,tfrom->p.y,x,y);
+            delete tfrom;
+            tfrom = 0;
+            if(tto) {
+                delete tto;
+                tto = 0;
+            }
+            if(tEdge) {
+                delete tEdge;
+                tEdge = 0;
+            }
+        }
+    }
+}*/
+
