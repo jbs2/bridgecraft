@@ -189,6 +189,15 @@ void processHits(GLint hits, GLuint buffer[]) {
 			recycleClicked=true;
 		} else if(recyclingMode) {
 			bridge->liveRemove((int)(*ptr)-24, (int)(*(ptr+1))-13,(int)(*(ptr+2))-24,(int)(*(ptr+3))-13);
+		} else if(*ptr == 303) {	// up button pressed
+//			if(100 > thicknessClickCounter > 0) {
+			
+//			}
+			++thickness;
+//			++thicknessClickCounter;
+		} else if(*ptr == 301) {	// down button pressed
+			if(thickness>1)
+				--thickness;
 		} else {
 			gotNewPosition=true;
 			mpx=*ptr;
@@ -243,7 +252,7 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
 					}
 				}
 				else if(newClick && gotNewPosition) {
-					bridge->click3(mpx,mpy);
+					bridge->click3(mpx,mpy,((float)thickness)/100.0f);
 					newClick = false;
 				}
 			}
@@ -264,7 +273,7 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
 				bridge->tto->set((float)mpx-24.0f, (float)mpy-13.0f);
 				if(bridge->tEdge == 0) {
 					bridge->tEdge = new Edge();	// tEdge = temporary Edge
-					bridge->tEdge->set(0.1f,bridge->tfrom,bridge->tto);
+					bridge->tEdge->set(((float)thickness)/100.0f,bridge->tfrom,bridge->tto);
 				}
 			} else {
 				if(bridge->tto == 0)	// tto = temporary to
@@ -274,7 +283,7 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
 				bridge->tto->set(bridge->tfrom->p.x+round((((float)mpx-24.0f)-bridge->tfrom->p.x)*vlength), bridge->tfrom->p.y+round((((float)mpy-13.0f)-bridge->tfrom->p.y)*vlength));
 				if(bridge->tEdge == 0) {
 					bridge->tEdge = new Edge();	// tEdge = temporary Edge
-					bridge->tEdge->set(0.1f,bridge->tfrom,bridge->tto);
+					bridge->tEdge->set(((float)thickness)/100.0f,bridge->tfrom,bridge->tto);
 				}
 			}
 		}
@@ -331,6 +340,51 @@ void Torus(float MinorRadius, float MajorRadius)					// Draw A Torus With Normal
 	glEnd();														// Done Torus
 }
 
+void upButton(float size, float x, float y, short dir) {
+	glPushName((unsigned int) 302+dir); glPushName((unsigned int) 302+dir);
+	size/=2.0f;
+	glBegin(GL_TRIANGLES);
+	glNormal3f(0,0,1);
+	glVertex3f(x-size,y-dir*size,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x+size,y-dir*size,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x,y+dir*size,0.1);
+	glEnd();
+	glPopName(); glPopName();
+}
+
+void nl(float wsize, float hsize, float x, float y, short dir) {
+	glPushName((unsigned int) 305+dir); glPushName((unsigned int) 305+dir);
+	wsize/=2.0f;
+	hsize/=2.0f; hsize+=wsize;
+	glBegin(GL_TRIANGLES);
+	glNormal3f(0,0,1);
+	glVertex3f(x-wsize,y-dir*wsize+hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x+wsize,y-dir*wsize+hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x,y+dir*wsize/2.0f+hsize,0.1);
+
+
+	glNormal3f(0,0,1);
+	glVertex3f(x-wsize,y-dir*wsize+hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x+wsize,y-dir*wsize+hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x+wsize,y-dir*wsize-hsize+wsize,0.1);
+
+
+	glNormal3f(0,0,1);
+	glVertex3f(x-wsize,y+dir*wsize-hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x+wsize,y+dir*wsize-hsize,0.1);
+	glNormal3f(0,0,1);
+	glVertex3f(x,y-dir*wsize/2.0f-hsize,0.1);
+	glEnd();
+	glPopName(); glPopName();
+}
+
 void square(float size, float x, float y) {
 //	glPopName(); glPopName();
     glPushName((unsigned int) 300); glPushName((unsigned int) 300);
@@ -338,7 +392,7 @@ void square(float size, float x, float y) {
 	glEnable( GL_TEXTURE_2D );
 	glBindTexture( GL_TEXTURE_2D, trashTexture );
 	glBegin(GL_TRIANGLES);
-	glNormal3f(0,0,1);
+	glNormal3f(0.0,0,1);
 	glTexCoord2d(0.0,1.0);
 	glVertex3f(x-size,y+size,0.1);
 	glNormal3f(0.0,0.0,1);
@@ -572,6 +626,9 @@ void Draw (void)
 				glColor3f(1.0f,1.0f,1.0f);
 		}
 		square(3.2,0,-13);
+		upButton(1.2,24,-11,1);
+		upButton(1.2,24,-13,-1);
+//		nl(0.4,0.8,22,-11,1);
 		for(int i=level->amountOfFix; i--;) {
 			glColor3f(0.1f,0.1f,1.0f);
 			Timber4(0.2f,level->fixPositions[i].x-0.10f,level->fixPositions[i].y,level->fixPositions[i].x+0.10f,level->fixPositions[i].y);
@@ -625,7 +682,9 @@ void DrawS() {
 	} else {
 		gridS();
 	}
-	square(3.2,0,-13);
+	square(2.7,0,-13);
+	upButton(0.8,24,-11,1);
+    upButton(0.8,24,-13,-1);
 
 	glPopMatrix();													// NEW: Unapply Dynamic Transform
 

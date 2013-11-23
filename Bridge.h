@@ -31,7 +31,7 @@ public:
 	void addEdge(float width, float fromX, float fromY, float toX, float toY);
 	void oneTimeStep(double time, Level* level);
 	void click(unsigned int cx, unsigned int cy);
-	void click3(unsigned int cx, unsigned int cy);
+	void click3(unsigned int cx, unsigned int cy, float thickness);
 	void stopClicking();
 	void liveRemove(int fx, int fy, int tx, int ty);
 private:

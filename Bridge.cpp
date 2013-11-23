@@ -250,7 +250,7 @@ void Bridge::click(unsigned int cx, unsigned int cy) {
 	}
 }
 
-void Bridge::click3(unsigned int cx, unsigned int cy) {
+void Bridge::click3(unsigned int cx, unsigned int cy, float thickness) {
 	float x = (float)cx - 24.0f;
 	float y = (float)cy - 13.0f;
 	if(!tfrom) {
@@ -259,7 +259,7 @@ void Bridge::click3(unsigned int cx, unsigned int cy) {
 		tfrom=near;
 	} else {
 		if(x != tfrom->p.x || y != tfrom->p.y) {
-			addEdge(0.2f,tfrom->p.x,tfrom->p.y,tto->p.x,tto->p.y);
+			addEdge(thickness,tfrom->p.x,tfrom->p.y,tto->p.x,tto->p.y);
 			stopClicking();
 		}
 	}

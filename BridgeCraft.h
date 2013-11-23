@@ -47,6 +47,9 @@ bool recycleClicked=false;	// got the 300, picking found recycle logo
 bool recycleState=false;	// is clicking recycle button
 bool recyclingMode=false;	// is in recycling mode
 
+int thickness=10;			// thickness of new built construction
+short thicknessClickCounter=0;	// avoid long press issue
+
 GLuint trashTexture;
 
 // User Defined Variables
