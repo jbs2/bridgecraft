@@ -7,4 +7,5 @@ simulate real steel construction with steel bars of different thickness
 have fun playing this game
 
 run make to compile it
-
+use your mouse (buttons) to play
+hit ESC to exit

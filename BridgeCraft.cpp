@@ -626,8 +626,8 @@ void Draw (void)
 				glColor3f(1.0f,1.0f,1.0f);
 		}
 		square(3.2,0,-13);
-		upButton(1.2,24,-11,1);
-		upButton(1.2,24,-13,-1);
+		upButton(1.2,22,-11,1);
+		upButton(1.2,22,-13,-1);
 //		nl(0.4,0.8,22,-11,1);
 		for(int i=level->amountOfFix; i--;) {
 			glColor3f(0.1f,0.1f,1.0f);
@@ -683,8 +683,8 @@ void DrawS() {
 		gridS();
 	}
 	square(2.7,0,-13);
-	upButton(0.8,24,-11,1);
-    upButton(0.8,24,-13,-1);
+	upButton(0.8,22,-11,1);
+    upButton(0.8,22,-13,-1);
 
 	glPopMatrix();													// NEW: Unapply Dynamic Transform
 
