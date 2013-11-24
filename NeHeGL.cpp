@@ -204,7 +204,6 @@ int main( int argc, char *argv[] ) {
 	GL_Window	window;
 	Keys keys;
 	KeySym key;
-//	int key;
 	struct timeval tv, tickCount;
 
 	window.keys	= &keys;
@@ -256,23 +255,27 @@ int main( int argc, char *argv[] ) {
 					break;
 				case KeyPress:
 					key = XLookupKeysym( &event.xkey, 0 );
-					if( key == XK_Escape )
+					if( key == XK_Escape ) {
+						printf("Esc key pressed, exiting\n");
 						done = true;
+					}
 					else if( key == XK_F1 ) {
+						printf("change to / from full screen mode\n");
 						DestroyWindowGL( &window );
 						window.init.isFullScreen = !window.init.isFullScreen;
 						CreateWindowGL( &window );
 						initGL(&window, &keys);
 					} else {
-						window.keys->keyDown[key] = true;
+						printf("another key was pressed %d\n",key);
+						if(key<256)
+							window.keys->keyDown[key] = true;
 					}
 					break;
 				case KeyRelease:
 					key = XLookupKeysym( &event.xkey, 0 );
-				//	printf("\nhello world %u\n",key);	fflush(stdout);
+					printf("\nhello world %u\n",key);	fflush(stdout);
 					if(key<256)
 						window.keys->keyDown[key] = false;
-	//				printf("\nhello world2");    fflush(stdout);
 					break;
 				case ClientMessage:
 					if( *XGetAtomName( window.init.dpy, event.xclient.message_type)
