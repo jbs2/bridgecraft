@@ -227,34 +227,34 @@ void stopPicking() {
 void Update (long milliseconds) {									// Perform Motion Updates Here
 	if(isClicked) {
 		if(newClick) {
-			mySelect(MousePt.s.X, MousePt.s.Y,(int)wwidth, (int)wheight);
-			if(recycleClicked) {
-				recycleState=true;
-				recyclingMode=recyclingMode?false:true;
-				newClick=false;
-			} else if(recyclingMode) {
-
-//				mySelect(MousePt.s.X, MousePt.s.Y,(int)wwidth, (int)wheight);
-				newClick=false;
-			} else {
-				Matrix3fSetIdentity(&LastRot);								// Reset Rotation
-				Matrix3fSetIdentity(&ThisRot);								// Reset Rotation
-				Matrix4fSetRotationFromMatrix3f(&Transform, &ThisRot);		// Reset Rotation
-				ArcBall.clickL(&MousePt);
-			
-				mySelect(MousePt.s.X, MousePt.s.Y, (int)wwidth, (int)wheight);
-	
-				if(state) {
-					state = 0;
-					newClick = false;
-					for(int i=bridge->nnodes; i--;) {
-						bridge->nodes[i].reset();
-					}
+			if(!state) {
+				mySelect(MousePt.s.X, MousePt.s.Y,(int)wwidth, (int)wheight);
+				if(recycleClicked) {
+					recycleState=true;
+					recyclingMode=recyclingMode?false:true;
+					newClick=false;
+				} else if(recyclingMode) {
+	//				mySelect(MousePt.s.X, MousePt.s.Y,(int)wwidth, (int)wheight);
+					newClick=false;
 				}
 				else if(newClick && gotNewPosition) {
 					bridge->click3(mpx,mpy,((float)thickness)/100.0f);
 					newClick = false;
 				}
+			} else {
+					Matrix3fSetIdentity(&LastRot);								// Reset Rotation
+					Matrix3fSetIdentity(&ThisRot);								// Reset Rotation
+					Matrix4fSetRotationFromMatrix3f(&Transform, &ThisRot);		// Reset Rotation
+					ArcBall.clickL(&MousePt);
+			
+			//		mySelect(MousePt.s.X, MousePt.s.Y, (int)wwidth, (int)wheight);
+	
+						state = 0;
+						newClick = false;
+						printf("was here asdf\n");
+						for(int i=bridge->nnodes; i--;) {
+							bridge->nodes[i].reset();
+						}
 			}
 		}
 	} else {
