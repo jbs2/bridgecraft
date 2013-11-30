@@ -356,8 +356,8 @@ void upButton(float size, float x, float y, short dir) {
 
 void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv) {
 	glPushName((unsigned int) 308+dir); glPushName((unsigned int) 308+dir);
-	wsize/=2.0f;
-	hsize/=2.0f;
+	wsize=((double)wsize)/2.0f;
+	hsize=((double)hsize)/2.0f;
 	glBegin(GL_TRIANGLES);
 	glNormal3f(0,0,1);
 	glVertex3f(dirhv ? x-wsize : x-hsize-dir*wsize,dirhv ? y-hsize-dir*wsize : y-wsize,0.1);
@@ -376,27 +376,20 @@ void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv) {
 	glPopName(); glPopName();
 }
 
-/*void nv(float wsize, float hsize, float x, float y, short dir) {
-	glPushName((unsigned int) 305+dir); glPushName((unsigned int) 305+dir);
-	wsize/=2.0f;
-	hsize/=2.0f;
-	glBegin(GL_TRIANGLES);
-	glNormal3f(0,0,1);
-	glVertex3f(x-wsize,y-hsize-dir*wsize,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x-wsize,y+hsize+dir*wsize,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x+wsize,y+hsize-dir*wsize,0.1);
+void ncol(float wsize, float hsize, float x, float y) {
+	float hhsize=((double)hsize)/2.0f+((double)wsize)/1.0f;
+	float hwsize=((double)wsize)/2.0f;
+	float hhwsize=((double)hwsize)/2.0f;
+	nbeam(wsize, hsize,x-hhsize,y-hhsize,1,true);
+	nbeam(wsize, hsize,x-hhsize,y+hhsize,1,true);
+	nbeam(wsize, hsize,x+hhsize,y-hhsize,-1,true);
+	nbeam(wsize, hsize,x+hhsize,y+hhsize,-1,true);
 
-	glNormal3f(0,0,1);
-	glVertex3f(x-wsize,y-hsize-dir*wsize,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x+wsize,y-hsize+dir*wsize,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x+wsize,y+hsize-dir*wsize,0.1);
-	glEnd();
-	glPopName(); glPopName();
-}*/
+	nbeam(wsize, hsize,x,y+hsize+wsize,-1,false);
+	nbeam(hwsize, hsize,x,y-hhwsize,-1,false);
+	nbeam(hwsize, hsize,x,y+hhwsize,1,false);
+	nbeam(wsize, hsize,x,y-hsize-wsize,1,false);
+}
 
 void square(float size, float x, float y) {
 //	glPopName(); glPopName();
@@ -641,10 +634,11 @@ void Draw (void)
 		square(3.2,0,-13);
 		upButton(1.2,22,-11,1);
 		upButton(1.2,22,-13,-1);
-		nbeam(0.3,0.8,19,-11,1,true);
+//		ncol(0.1,0.8,17,-11);
+/*		nbeam(0.3,0.8,19,-11,1,true);
 		nbeam(0.3,0.8,18,-11,-1,false);
 		nbeam(0.3,0.8,20,-11,-1,true);
-		nbeam(0.3,0.8,21,-11,1,false);
+		nbeam(0.3,0.8,21,-11,1,false);*/
 		for(int i=level->amountOfFix; i--;) {
 			glColor3f(0.1f,0.1f,1.0f);
 			Timber4(0.2f,level->fixPositions[i].x-0.10f,level->fixPositions[i].y,level->fixPositions[i].x+0.10f,level->fixPositions[i].y);
