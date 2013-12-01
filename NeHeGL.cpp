@@ -31,6 +31,8 @@ extern Point2fT    MousePt;                                             //*NEW* 
 extern bool        isClicked;                                           //*NEW* Clicking the mouse?
 extern bool        isRClicked;                                          //*NEW* Clicking the right mouse button?
 
+extern int		   buttonClickLength;
+
 extern short wwidth;
 extern short wheight;
 
@@ -244,6 +246,7 @@ int main( int argc, char *argv[] ) {
 					}
 					break;
 				case ButtonRelease:
+					buttonClickLength=40;
 					switch( event.xbutton.button ) {
 						case 1: isClicked = false; break;
 						case 3: isRClicked = false; break;

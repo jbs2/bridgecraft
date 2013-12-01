@@ -84,7 +84,7 @@ struct Image {
 };
 typedef struct Image Image;
 
-
+int buttonClickLength=100;
 
 #endif // BRIDGECRAFT_H
 

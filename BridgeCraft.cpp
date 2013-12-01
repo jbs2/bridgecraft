@@ -193,11 +193,23 @@ void processHits(GLint hits, GLuint buffer[]) {
 //			if(100 > thicknessClickCounter > 0) {
 			
 //			}
-			++thickness;
+			if(bridge->tfrom) {}
+			else if(buttonClickLength==40 || buttonClickLength==0) {
+				++thickness;
+			}
+			if(buttonClickLength)
+				--buttonClickLength;
 //			++thicknessClickCounter;
 		} else if(*ptr == 301) {	// down button pressed
-			if(thickness>1)
-				--thickness;
+			if(thickness>1) {
+				printf("uhu\n");
+				if(bridge->tfrom) {}
+				else if(buttonClickLength==40 || buttonClickLength==0) {
+					--thickness;
+				}
+				if(buttonClickLength)
+					--buttonClickLength;
+			}
 		} else {
 			gotNewPosition=true;
 			mpx=*ptr;
@@ -232,10 +244,10 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
 				if(recycleClicked) {
 					recycleState=true;
 					recyclingMode=recyclingMode?false:true;
-					newClick=false;
+					newClick = false;
 				} else if(recyclingMode) {
 	//				mySelect(MousePt.s.X, MousePt.s.Y,(int)wwidth, (int)wheight);
-					newClick=false;
+					newClick = false;
 				}
 				else if(newClick && gotNewPosition) {
 					bridge->click3(mpx,mpy,((float)thickness)/100.0f);
@@ -246,12 +258,11 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
 					Matrix3fSetIdentity(&ThisRot);								// Reset Rotation
 					Matrix4fSetRotationFromMatrix3f(&Transform, &ThisRot);		// Reset Rotation
 					ArcBall.clickL(&MousePt);
+					newClick = false;
 			
 			//		mySelect(MousePt.s.X, MousePt.s.Y, (int)wwidth, (int)wheight);
-	
 						state = 0;
-						newClick = false;
-						printf("was here asdf\n");
+					//	printf("was here asdf\n");
 						for(int i=bridge->nnodes; i--;) {
 							bridge->nodes[i].reset();
 						}
@@ -415,7 +426,6 @@ void drawDigit(float wsize, float hsize, float x, float y, short num) {
 }
 
 void drawNumber(float wsize, float hsize, float x, float y, int num, int length) {
-	printf("drawNumber %d\n",num);
 	for(int i=length; i--;) {
 		if(i)
 			drawDigit(wsize,hsize,x+10-i,y,(num/(int)pow(10,i))%10);
