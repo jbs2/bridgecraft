@@ -354,7 +354,13 @@ void upButton(float size, float x, float y, short dir) {
 	glPopName(); glPopName();
 }
 
-void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv) {
+void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv, bool enabled) {
+	if(enabled)
+	//	glColor3f(0.090196f,0.57255f,0.88627f); from image
+		glColor3f(0.190196f,0.67255f,0.98627f);
+	else
+	//	glColor3f(0.015686f,0.078431f,0.12941f); from image
+		glColor3f(0.005686f,0.068431f,0.11941f);
 	glPushName((unsigned int) 308+dir); glPushName((unsigned int) 308+dir);
 	wsize=((double)wsize)/2.0f;
 	hsize=((double)hsize)/2.0f;
@@ -376,20 +382,45 @@ void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv) {
 	glPopName(); glPopName();
 }
 
-void ncol(float wsize, float hsize, float x, float y) {
+void ncol(float wsize, float hsize, float x, float y, bool a, bool b, bool c, bool d, bool e, bool f, bool g) {
 	float hhsize=((double)hsize)/2.0f;//+((double)wsize)/1.0f;
 	float hwsize=((double)wsize)/2.0f;
 	float hhwsize=((double)hwsize)/2.0f;
 	float hhh=((double)hsize)/7.0f;
-	nbeam(wsize, hsize-hhh,x-hhsize,y-hhsize,1,true);
-	nbeam(wsize, hsize-hhh,x-hhsize,y+hhsize,1,true);
-	nbeam(wsize, hsize-hhh,x+hhsize,y-hhsize,-1,true);
-	nbeam(wsize, hsize-hhh,x+hhsize,y+hhsize,-1,true);
+	nbeam(wsize, hsize-hhh,x-hhsize,y-hhsize,1,true, e);
+	nbeam(wsize, hsize-hhh,x-hhsize,y+hhsize,1,true, f);
+	nbeam(wsize, hsize-hhh,x+hhsize,y-hhsize,-1,true, c);
+	nbeam(wsize, hsize-hhh,x+hhsize,y+hhsize,-1,true, b);
 
-	nbeam(wsize, hsize-hhh/2.0f,x,y+hsize-hwsize,-1,false);
-	nbeam(hwsize, hsize,x,y-hhwsize,-1,false);
-	nbeam(hwsize, hsize,x,y+hhwsize,1,false);
-	nbeam(wsize, hsize-hhh/2.0f,x,y-hsize+hwsize,1,false);
+	nbeam(wsize, hsize-hhh/2.0f,x,y+hsize-hwsize,-1,false, a);
+	nbeam(hwsize, hsize,x,y-hhwsize,-1,false, g);
+	nbeam(hwsize, hsize,x,y+hhwsize,1,false, g);
+	nbeam(wsize, hsize-hhh/2.0f,x,y-hsize+hwsize,1,false, d);
+}
+
+void drawDigit(float wsize, float hsize, float x, float y, short num) {
+	switch (num) {
+		case 0: ncol(wsize, hsize, x, y, true, true, true, true, true, true, false); break; 
+		case 1: ncol(wsize, hsize, x, y, false, true, true, false, false, false, false); break; 
+		case 2: ncol(wsize, hsize, x, y, true, true, false, true, true, false, true); break; 
+		case 3: ncol(wsize, hsize, x, y, true, true, true, true, false, false, true); break; 
+		case 4: ncol(wsize, hsize, x, y, false, true, true, false, false, true, true); break; 
+		case 5: ncol(wsize, hsize, x, y, true, false, true, true, false, true, true); break; 
+		case 6: ncol(wsize, hsize, x, y, true, false, true, true, true, true, true); break; 
+		case 7: ncol(wsize, hsize, x, y, true, true, true, false, false, false, false); break; 
+		case 8: ncol(wsize, hsize, x, y, true, true, true, true, true, true, true); break; 
+		case 9: ncol(wsize, hsize, x, y, true, true, true, true, false, true, true); break;
+		default: printf("Error in drawDigit(...)\n");
+	}
+}
+
+void drawNumber(float wsize, float hsize, float x, float y, int num) {
+	for(int i=0; i<10;) {
+		if(i)
+			drawDigit(wsize,hsize,x+i,y,(num/(10*i))%10);
+		else
+			drawDigit(wsize,hsize,x+i,y,num%10);
+	}
 }
 
 void square(float size, float x, float y) {
@@ -633,9 +664,22 @@ void Draw (void)
 				glColor3f(1.0f,1.0f,1.0f);
 		}
 		square(3.2,0,-13);
+		if(!recyclingMode)
+			glColor3f(0.190196f,0.67255f,0.98627f);
+			//glColor3f(0.090196f,0.57255f,0.88627f); from image
 		upButton(1.2,22,-11,1);
 		upButton(1.2,22,-13,-1);
-		ncol(0.1,0.8,17,-11);
+//		ncol(0.1,0.8,17,-11, true, true, true, true, true, true, true);
+//		drawDigit(0.1,0.8,11,-11,0);
+		drawNumber(0.1,0.8,12,-12,1);
+/*		drawNumber(0.1,0.8,13,-11,2);
+		drawNumber(0.1,0.8,14,-11,3);
+		drawNumber(0.1,0.8,15,-11,4);
+		drawNumber(0.1,0.8,16,-11,5);
+		drawNumber(0.1,0.8,17,-11,6);
+		drawNumber(0.1,0.8,18,-11,7);
+		drawNumber(0.1,0.8,19,-11,8);
+		drawNumber(0.1,0.8,20,-11,9);*/
 /*		nbeam(0.3,0.8,19,-11,1,true);
 		nbeam(0.3,0.8,18,-11,-1,false);
 		nbeam(0.3,0.8,20,-11,-1,true);
