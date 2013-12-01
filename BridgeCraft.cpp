@@ -414,12 +414,13 @@ void drawDigit(float wsize, float hsize, float x, float y, short num) {
 	}
 }
 
-void drawNumber(float wsize, float hsize, float x, float y, int num) {
-	for(int i=0; i<10;) {
+void drawNumber(float wsize, float hsize, float x, float y, int num, int length) {
+	printf("drawNumber %d\n",num);
+	for(int i=length; i--;) {
 		if(i)
-			drawDigit(wsize,hsize,x+i,y,(num/(10*i))%10);
+			drawDigit(wsize,hsize,x+10-i,y,(num/(int)pow(10,i))%10);
 		else
-			drawDigit(wsize,hsize,x+i,y,num%10);
+			drawDigit(wsize,hsize,x+10-i,y,num%10);
 	}
 }
 
@@ -671,7 +672,7 @@ void Draw (void)
 		upButton(1.2,22,-13,-1);
 //		ncol(0.1,0.8,17,-11, true, true, true, true, true, true, true);
 //		drawDigit(0.1,0.8,11,-11,0);
-		drawNumber(0.1,0.8,12,-12,1);
+		drawNumber(0.1,0.8,10,-12,thickness,5);
 /*		drawNumber(0.1,0.8,13,-11,2);
 		drawNumber(0.1,0.8,14,-11,3);
 		drawNumber(0.1,0.8,15,-11,4);
