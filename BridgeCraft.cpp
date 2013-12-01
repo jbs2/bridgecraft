@@ -377,18 +377,19 @@ void nbeam(float wsize, float hsize, float x, float y, short dir, bool dirhv) {
 }
 
 void ncol(float wsize, float hsize, float x, float y) {
-	float hhsize=((double)hsize)/2.0f+((double)wsize)/1.0f;
+	float hhsize=((double)hsize)/2.0f;//+((double)wsize)/1.0f;
 	float hwsize=((double)wsize)/2.0f;
 	float hhwsize=((double)hwsize)/2.0f;
-	nbeam(wsize, hsize,x-hhsize,y-hhsize,1,true);
-	nbeam(wsize, hsize,x-hhsize,y+hhsize,1,true);
-	nbeam(wsize, hsize,x+hhsize,y-hhsize,-1,true);
-	nbeam(wsize, hsize,x+hhsize,y+hhsize,-1,true);
+	float hhh=((double)hsize)/7.0f;
+	nbeam(wsize, hsize-hhh,x-hhsize,y-hhsize,1,true);
+	nbeam(wsize, hsize-hhh,x-hhsize,y+hhsize,1,true);
+	nbeam(wsize, hsize-hhh,x+hhsize,y-hhsize,-1,true);
+	nbeam(wsize, hsize-hhh,x+hhsize,y+hhsize,-1,true);
 
-	nbeam(wsize, hsize,x,y+hsize+wsize,-1,false);
+	nbeam(wsize, hsize-hhh/2.0f,x,y+hsize-hwsize,-1,false);
 	nbeam(hwsize, hsize,x,y-hhwsize,-1,false);
 	nbeam(hwsize, hsize,x,y+hhwsize,1,false);
-	nbeam(wsize, hsize,x,y-hsize-wsize,1,false);
+	nbeam(wsize, hsize-hhh/2.0f,x,y-hsize+hwsize,1,false);
 }
 
 void square(float size, float x, float y) {
@@ -634,7 +635,7 @@ void Draw (void)
 		square(3.2,0,-13);
 		upButton(1.2,22,-11,1);
 		upButton(1.2,22,-13,-1);
-//		ncol(0.1,0.8,17,-11);
+		ncol(0.1,0.8,17,-11);
 /*		nbeam(0.3,0.8,19,-11,1,true);
 		nbeam(0.3,0.8,18,-11,-1,false);
 		nbeam(0.3,0.8,20,-11,-1,true);

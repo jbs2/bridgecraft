@@ -6,8 +6,12 @@ simulate real steel construction with steel bars of different thickness
 
 have fun playing this game
 
-run make to compile it
-use your mouse (buttons) to play
-move your mouse holding the right mouse button
-switch between full screen and window mode using the F1 key
-hit ESC to exit
+install:
+	run make to compile it
+
+play:
+	use your mouse (buttons) to play
+	move your mouse holding the right mouse button
+	switch between full screen and window mode using the F1 key
+	hit ESC to exit
+	click the left mouse button while still holding the right one
