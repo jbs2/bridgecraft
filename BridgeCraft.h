@@ -20,6 +20,8 @@
 #include "Level1.h"
 #include "Level2.h"
 
+#include "Number.h"
+
 #ifndef CDS_FULLSCREEN                                              // CDS_FULLSCREEN Is Not Defined By Some
 #define CDS_FULLSCREEN 4                                            // Compilers. By Defining It This Way,
 #endif                                                              // We Can Avoid Errors

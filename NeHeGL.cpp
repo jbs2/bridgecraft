@@ -269,14 +269,14 @@ int main( int argc, char *argv[] ) {
 						CreateWindowGL( &window );
 						initGL(&window, &keys);
 					} else {
-						printf("another key was pressed %d\n",key);
+						printf("another key was pressed %lu\n",key);
 						if(key<256)
 							window.keys->keyDown[key] = true;
 					}
 					break;
 				case KeyRelease:
 					key = XLookupKeysym( &event.xkey, 0 );
-					printf("\nhello world %u\n",key);	fflush(stdout);
+					printf("\nhello world %lu\n",key);	fflush(stdout);
 					if(key<256)
 						window.keys->keyDown[key] = false;
 					break;
