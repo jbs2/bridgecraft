@@ -46,26 +46,35 @@ void Number::ncol(float wsize, float hsize, float x, float y, bool a, bool b, bo
 
 void Number::drawDigit(float wsize, float hsize, float x, float y, short num) {
 	switch (num) {
-		case 0: ncol(wsize, hsize, x, y, true, true, true, true, true, true, false); break; 
-		case 1: ncol(wsize, hsize, x, y, false, true, true, false, false, false, false); break; 
-		case 2: ncol(wsize, hsize, x, y, true, true, false, true, true, false, true); break; 
-		case 3: ncol(wsize, hsize, x, y, true, true, true, true, false, false, true); break; 
-		case 4: ncol(wsize, hsize, x, y, false, true, true, false, false, true, true); break; 
-		case 5: ncol(wsize, hsize, x, y, true, false, true, true, false, true, true); break; 
-		case 6: ncol(wsize, hsize, x, y, true, false, true, true, true, true, true); break; 
-		case 7: ncol(wsize, hsize, x, y, true, true, true, false, false, false, false); break; 
-		case 8: ncol(wsize, hsize, x, y, true, true, true, true, true, true, true); break; 
-		case 9: ncol(wsize, hsize, x, y, true, true, true, true, false, true, true); break;
+		case 0:  ncol(wsize, hsize, x, y, true,  true,  true,  true,  true,  true,  false); break; 
+		case 1:  ncol(wsize, hsize, x, y, false, true,  true,  false, false, false, false); break; 
+		case 2:  ncol(wsize, hsize, x, y, true,  true,  false, true,  true,  false, true ); break; 
+		case 3:  ncol(wsize, hsize, x, y, true,  true,  true,  true,  false, false, true ); break; 
+		case 4:  ncol(wsize, hsize, x, y, false, true,  true,  false, false, true,  true ); break; 
+		case 5:  ncol(wsize, hsize, x, y, true,  false, true,  true,  false, true,  true ); break; 
+		case 6:  ncol(wsize, hsize, x, y, true,  false, true,  true,  true,  true,  true ); break; 
+		case 7:  ncol(wsize, hsize, x, y, true,  true,  true,  false, false, false, false); break; 
+		case 8:  ncol(wsize, hsize, x, y, true,  true,  true,  true,  true,  true,  true ); break; 
+		case 9:  ncol(wsize, hsize, x, y, true,  true,  true,  true,  false, true,  true ); break;
+		case 10: ncol(wsize, hsize, x, y, false, false, false, false, false, false, false); break;
 		default: std::cout<<("Error in drawDigit(...)\n");
 	}
 }
 
 void Number::drawNumber(float wsize, float hsize, float x, float y, int num, int length) {
+	bool firstNotNull=false;
+	short digit=0;
 	for(int i=length; i--;) {
 		if(i)
-			drawDigit(wsize,hsize,x+10-i,y,(num/(int)pow(10,i))%10);
+			digit=(num/(int)pow(10,i))%10;
 		else
-			drawDigit(wsize,hsize,x+10-i,y,num%10);
+			digit=num%10;
+		if(!digit && !firstNotNull) {
+			drawDigit(wsize,hsize,x+10-i,y,10);
+		} else {
+			drawDigit(wsize,hsize,x+10-i,y,digit);
+			firstNotNull=true;
+		}
 	}
 }
 

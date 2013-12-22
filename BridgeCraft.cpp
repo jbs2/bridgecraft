@@ -7,91 +7,6 @@
 
 #include "BridgeCraft.h"
 
-// quick and dirty bitmap loader...for 24 bit bitmaps with 1 plane only.  
-// See http://www.dcs.ed.ac.uk/~mxr/gfx/2d/BMP.txt for more info.
-/*int ImageLoad(char *filename, Image *image) {
-    FILE *file;
-    unsigned long size;                 // size of the image in bytes.
-    unsigned long i;                    // standard counter.
-    unsigned short int planes;          // number of planes in image (must be 1) 
-    unsigned short int bpp;             // number of bits per pixel (must be 26)
-    char temp;                          // temporary color storage for bgr-rgb conversion.
-    if ((file = fopen(filename, "rb"))==NULL) {		// make sure the file is there.
-		printf("File Not Found : %s\n",filename);
-		return 0;
-    }
-    fseek(file, 18, SEEK_CUR);			// seek through the bmp header, up to the width/height:
-	image->sizeX=0;
-    if ((i = fread(&image->sizeX, 4, 1, file)) != 1) {		// read the width
-    	printf("Error reading width from %s.\n", filename);
-		return 0;
-    }
-//    printf("Width of %s: %lu\n", filename, image->sizeX);
-	image->sizeY=0;
-    if ((i = fread(&image->sizeY, 4, 1, file)) != 1) {		// read the height
-		printf("Error reading height from %s.\n", filename);
-		return 0;
-    }
-//    printf("Height of %s: %lu\n", filename, image->sizeY);
-    size = image->sizeX * image->sizeY * 3;		// calculate the size (assuming 24 bits or 3 bytes per pixel).
-    if ((fread(&planes, 2, 1, file)) != 1) {	// read the planes
-		printf("Error reading planes from %s.\n", filename);
-		return 0;
-    }
-    if (planes != 1) {
-		printf("Planes from %s is not 1: %u\n", filename, planes);
-		return 0;
-    }
-    if ((i = fread(&bpp, 2, 1, file)) != 1) { // read the bpp
-		printf("Error reading bpp from %s.\n", filename);
-		return 0;
-    }
-    if (bpp != 24) {
-		printf("Bpp from %s is not 24: %u\n", filename, bpp);
-		return 0;
-    }
-    fseek(file, 24, SEEK_CUR);		// seek past the rest of the bitmap header.
-    image->data = (char *) malloc(size);	// read the data
-    if (image->data == NULL) {
-		printf("Error allocating memory for color-corrected image data");
-		return 0;	
-    }
-    if ((i = fread(image->data, size, 1, file)) != 1) {
-		printf("Error reading image data from %s.\n", filename);
-		return 0;
-    }
-    for (i=0;i<size;i+=3) { // reverse all of the colors. (bgr -> rgb)
-		temp = image->data[i];
-		image->data[i] = image->data[i+2];
-		image->data[i+2] = temp;
-    }
-    return 1;
-}*/
-
-// Load Bitmaps And Convert To Textures
-/*void LoadGLTextures() {	
-	// Load Texture
-	Image *image1;
-             
-	// allocate space for texture
-	image1 = (Image *) malloc(sizeof(Image));
-	if (image1 == NULL) {
-		printf("Error allocating space for image");
-		exit(0);
-	}
-	if (!ImageLoad((char*)"trash.bmp", image1)) {
-		exit(1);
-	}        
-	// Create Texture
-	glGenTextures(1, &trashTexture);
-	glBindTexture(GL_TEXTURE_2D, trashTexture);   // 2d texture (x and y size)
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // scale linearly when image bigger than texture
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // scale linearly when image smalled than texture
-	// 2d texture, level of detail 0 (normal), 3 components (red, green, blue), x size from image, y size from image, 
-	// border 0 (normal), rgb color data, unsigned byte data, and finally the data itself.
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
-}*/
-
 bool Initialize (GL_Window* window, Keys* keys) {						// Any GL Init Code & User Initialiazation Goes Here
 	g_window	= window;
 	g_keys		= keys;
@@ -202,7 +117,7 @@ void processHits(GLint hits, GLuint buffer[]) {
 //			++thicknessClickCounter;
 		} else if(*ptr == 301) {	// down button pressed
 			if(thickness>1) {
-				printf("uhu\n");
+//				printf("uhu\n");
 				if(bridge->tfrom) {}
 				else if(buttonClickLength==40 || buttonClickLength==0) {
 					--thickness;
@@ -613,7 +528,7 @@ void Draw (void)
 		upButton(1.2,22,-13,-1);
 //		ncol(0.1,0.8,17,-11, true, true, true, true, true, true, true);
 //		drawDigit(0.1,0.8,11,-11,0);
-		Number::drawNumber(0.1,0.8,10,-12,thickness,5);
+		Number::drawNumber(0.1,0.8,10,-12,thickness,4);
 /*		drawNumber(0.1,0.8,13,-11,2);
 		drawNumber(0.1,0.8,14,-11,3);
 		drawNumber(0.1,0.8,15,-11,4);
