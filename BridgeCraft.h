@@ -2,7 +2,7 @@
 #ifndef BRIDGECRAFT_H
 #define BRIDGECRAFT_H
 
-#include<iostream>
+#include <iostream>
 
 #include <GL/gl.h>                                                  // Header File For The OpenGL32 Library
 #include <GL/glu.h>                                                 // Header File For The GLu32 Library
@@ -21,6 +21,7 @@
 #include "Level2.h"
 
 #include "Number.h"
+#include "Textures.h"
 
 #ifndef CDS_FULLSCREEN                                              // CDS_FULLSCREEN Is Not Defined By Some
 #define CDS_FULLSCREEN 4                                            // Compilers. By Defining It This Way,
@@ -52,7 +53,6 @@ bool recyclingMode=false;	// is in recycling mode
 int thickness=10;			// thickness of new built construction
 short thicknessClickCounter=0;	// avoid long press issue
 
-GLuint trashTexture;
 
 // User Defined Variables
 GLUquadricObj *quadratic;                                           // Used For Our Quadric
@@ -78,13 +78,13 @@ bool        isClicked  = false;                                     // NEW: Clic
 bool        isRClicked = false;                                     // NEW: Clicking The Right Mouse Button?
 bool        isDragging = false;           
 
-/* Image type - contains height, width, and data */
+/* Image type - contains height, width, and data
 struct Image {
     unsigned long sizeX;
     unsigned long sizeY;
     char *data;
 };
-typedef struct Image Image;
+typedef struct Image Image;*/
 
 int buttonClickLength=100;
 

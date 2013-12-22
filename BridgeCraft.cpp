@@ -9,12 +9,12 @@
 
 // quick and dirty bitmap loader...for 24 bit bitmaps with 1 plane only.  
 // See http://www.dcs.ed.ac.uk/~mxr/gfx/2d/BMP.txt for more info.
-int ImageLoad(char *filename, Image *image) {
+/*int ImageLoad(char *filename, Image *image) {
     FILE *file;
     unsigned long size;                 // size of the image in bytes.
     unsigned long i;                    // standard counter.
     unsigned short int planes;          // number of planes in image (must be 1) 
-    unsigned short int bpp;             // number of bits per pixel (must be 24)
+    unsigned short int bpp;             // number of bits per pixel (must be 26)
     char temp;                          // temporary color storage for bgr-rgb conversion.
     if ((file = fopen(filename, "rb"))==NULL) {		// make sure the file is there.
 		printf("File Not Found : %s\n",filename);
@@ -66,10 +66,10 @@ int ImageLoad(char *filename, Image *image) {
 		image->data[i+2] = temp;
     }
     return 1;
-}
+}*/
 
 // Load Bitmaps And Convert To Textures
-void LoadGLTextures() {	
+/*void LoadGLTextures() {	
 	// Load Texture
 	Image *image1;
              
@@ -90,7 +90,7 @@ void LoadGLTextures() {
 	// 2d texture, level of detail 0 (normal), 3 components (red, green, blue), x size from image, y size from image, 
 	// border 0 (normal), rgb color data, unsigned byte data, and finally the data itself.
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
-}
+}*/
 
 bool Initialize (GL_Window* window, Keys* keys) {						// Any GL Init Code & User Initialiazation Goes Here
 	g_window	= window;
@@ -129,14 +129,14 @@ bool Initialize (GL_Window* window, Keys* keys) {						// Any GL Init Code & Use
 	bridge->addEdge(0.2f,-14.0f,0.0f,14.0f,-3.0f);
 
 //	trashTexture = LoadTextureRAW("trash",0,20,20);
-	LoadGLTextures();
+	Textures::LoadGLTextures();
 
 	return true;													// Return true (Initialization Successful)
 }
 
 void Deinitialize (void) {											// Any User DeInitialization Goes Here
 	gluDeleteQuadric(quadratic);
-	glDeleteTextures( 1, &trashTexture );
+	Textures::deleteTextures();
 	delete bridge;
 }
 
@@ -370,7 +370,7 @@ void square(float size, float x, float y) {
     glPushName((unsigned int) 300); glPushName((unsigned int) 300);
 	size/=2.0f;
 	glEnable( GL_TEXTURE_2D );
-	glBindTexture( GL_TEXTURE_2D, trashTexture );
+	Textures::bindTextures();
 	glBegin(GL_TRIANGLES);
 	glNormal3f(0.0,0,1);
 	glTexCoord2d(0.0,1.0);
