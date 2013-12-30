@@ -241,228 +241,6 @@ void Update (long milliseconds) {									// Perform Motion Updates Here
     }
 }
 
-void Torus(float MinorRadius, float MajorRadius)					// Draw A Torus With Normals
-{
-	int i, j;
-	glBegin( GL_TRIANGLE_STRIP );									// Start A Triangle Strip
-		for (i=0; i<20; i++ )										// Stacks
-		{
-			for (j=-1; j<20; j++)									// Slices
-			{
-				float wrapFrac = (j%20)/(float)20;
-				float phi = PI2*wrapFrac;
-				float sinphi = float(sin(phi));
-				float cosphi = float(cos(phi));
-
-				float r = MajorRadius + MinorRadius*cosphi;
-
-				glNormal3f(float(sin(PI2*(i%20+wrapFrac)/(float)20))*cosphi, sinphi, float(cos(PI2*(i%20+wrapFrac)/(float)20))*cosphi);
-				glVertex3f(float(sin(PI2*(i%20+wrapFrac)/(float)20))*r,MinorRadius*sinphi,float(cos(PI2*(i%20+wrapFrac)/(float)20))*r);
-
-				glNormal3f(float(sin(PI2*(i+1%20+wrapFrac)/(float)20))*cosphi, sinphi, float(cos(PI2*(i+1%20+wrapFrac)/(float)20))*cosphi);
-				glVertex3f(float(sin(PI2*(i+1%20+wrapFrac)/(float)20))*r,MinorRadius*sinphi,float(cos(PI2*(i+1%20+wrapFrac)/(float)20))*r);
-			}
-		}
-	glEnd();														// Done Torus
-}
-
-void upButton(float size, float x, float y, short dir) {
-	glPushName((unsigned int) 302+dir); glPushName((unsigned int) 302+dir);
-	size/=2.0f;
-	glBegin(GL_TRIANGLES);
-	glNormal3f(0,0,1);
-	glVertex3f(x-size,y-dir*size,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x+size,y-dir*size,0.1);
-	glNormal3f(0,0,1);
-	glVertex3f(x,y+dir*size,0.1);
-	glEnd();
-	glPopName(); glPopName();
-}
-
-void square(float size, float x, float y) {
-//	glPopName(); glPopName();
-    glPushName((unsigned int) 300); glPushName((unsigned int) 300);
-	size/=2.0f;
-	glEnable( GL_TEXTURE_2D );
-	Textures::bindTextures();
-	glBegin(GL_TRIANGLES);
-	glNormal3f(0.0,0,1);
-	glTexCoord2d(0.0,1.0);
-	glVertex3f(x-size,y+size,0.1);
-	glNormal3f(0.0,0.0,1);
-	glTexCoord2d(1.0,1.0);
-	glVertex3f(x+size,y+size,0.1);
-	glNormal3f(0.0,0.0,1);
-	glTexCoord2d(1.0,0.0);
-	glVertex3f(x+size,y-size,0.1);
-	glNormal3f(0.0,0.0,1);
-	glTexCoord2d(1.0,0.0);
-	glVertex3f(x+size,y-size,0.1);
-	glNormal3f(0.0,0.0,1);
-	glTexCoord2d(0.0,0.0);
-	glVertex3f(x-size,y-size,0.1);
-	glNormal3f(0.0,0.0,1);
-	glTexCoord2d(0.0,1.0);
-	glVertex3f(x-size,y+size,0.1);
-	glEnd();
-	glDisable( GL_TEXTURE_2D);
-	glPopName(); glPopName();
-}
-
-void Timber4(float width, float fromX, float fromY, float toX, float toY) {
-	float ir=width/(float)2;
-	Tuple3fT a; a.s.X=fromX-toX; a.s.Y=fromY-toY; a.s.Z=0;
-	Tuple3fT b; b.s.X=0; b.s.Y=0; b.s.Z=-1;
-	Tuple3fT normal, dir;
-	Vector3fCross(&normal, &a, &b);
-	GLfloat l=Vector3fLength(&normal);
-	normal.s.X=normal.s.X/l; normal.s.Y=normal.s.Y/l; normal.s.Z=normal.s.Z/l;
-	dir.s.X=normal.s.X*ir; dir.s.Y=normal.s.Y*ir; dir.s.Z=normal.s.Z*ir;
-	l=Vector3fLength(&a);
-	a.s.X=a.s.X/l; a.s.Y=a.s.Y/l; a.s.Z=a.s.Z/l;
-
-	glBegin(GL_TRIANGLES);
-		// If it's too slow, leave these 4 triangles away
-		// 4 triangles to model the two caps
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,-ir);
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,ir);
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,ir);
-
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,-ir);
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,-ir);
-		glNormal3f(a.s.X,a.s.Y,a.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,ir);
-
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,-ir);
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,ir);
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,ir);
-
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,ir);
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,-ir);
-		glNormal3f(-a.s.X,-a.s.Y,-a.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,-ir);
-
-		// 4 triangles for 2 sides
-		glNormal3f(0,0,1);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,ir);
-		glNormal3f(0,0,1);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,ir);
-		glNormal3f(0,0,1);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,ir);
-
-		glNormal3f(0,0,1);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,ir);
-		glNormal3f(0,0,1);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,ir);
-		glNormal3f(0,0,1);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,ir);
-
-		glNormal3f(0,0,-1);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,-ir);
-		glNormal3f(0,0,-1);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,-ir);
-		glNormal3f(0,0,-1);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,-ir);
-
-		glNormal3f(0,0,-1);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,-ir);
-		glNormal3f(0,0,-1);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,-ir);
-		glNormal3f(0,0,-1);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,-ir);
-
-		// Schiefe Ebene
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,-ir);
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,ir);
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,ir);
-
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(fromX-dir.s.X,fromY-dir.s.Y,-ir);
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,ir);
-		glNormal3f(-normal.s.X,-normal.s.Y,-normal.s.Z);
-		glVertex3f(toX-dir.s.X,toY-dir.s.Y,-ir);
-
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,-ir);
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,ir);
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,ir);
-
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(fromX+dir.s.X,fromY+dir.s.Y,-ir);
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,ir);
-		glNormal3f(normal.s.X,normal.s.Y,normal.s.Z);
-		glVertex3f(toX+dir.s.X,toY+dir.s.Y,-ir);
-	glEnd();
-}
-
-void grid() {
-	glBegin(GL_POINTS);
-		for(int i=-24; i<=24; i+=1)
-			for(int j=-13; j<=13; j+=1) {
-				glNormal3f(0.0,0.0,1.0);
-				glVertex3f((float)i,(float)j,0.0f);
-			}
-	glEnd();
-}
-
-void gridS() {
-	glPushName(0); glPushName(0);
-	for(int i=-24; i<=24; i+=1)
-		for(int j=-13; j<=13; j+=1) {
-			glPopName(); glPopName();
-			glPushName((unsigned int) (i+24)); glPushName((unsigned int) (j+13));
-			glBegin(GL_POINTS);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i,j,0.0f);
-			glEnd();
-		}
-	glPopName(); glPopName();
-}
-
-void grid2() {
-	void glInitNames(void);
-	glPushName(0);
-	const float gridSize = 0.06/2.0;
-	glBegin(GL_TRIANGLES);
-	for(float i=-24; i<=24; i+=1.0f) {
-		for(float j=-12.5; j<=12.5; j+=1.0f) {
-			glLoadName(i+j*49);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i-gridSize,j+gridSize,0.0f);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i-gridSize,j-gridSize,0.0f);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i+gridSize,j-gridSize,0.0f);
-			
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i+gridSize,j-gridSize,0.0f);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i+gridSize,j+gridSize,0.0f);
-			glNormal3f(0.0,0.0,1.0);
-			glVertex3f(i-gridSize,j+gridSize,0.0f);
-		}
-	}
-	glEnd();
-}
-
 void Draw (void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);				// Clear Screen And Depth Buffer
@@ -486,7 +264,7 @@ void Draw (void)
 //	Timber4(0.2f,-3.0f,-1.0f,-2.0f,1.0f);
 //	std::cout<<wwidth<<"  "<<wheight<<"\n";
 	if(!state)
-		grid();
+		Objects::grid();
 //	grid2();
 
 //	bridge.addNewNode(-3.0f,0.0f);
@@ -499,18 +277,18 @@ void Draw (void)
 			Edge& e=bridge->edges[i];
 	//		std::cout<<"\n"<<e.stress;
 			glColor3f(e.stress,1.0f-e.stress,0.1f);
-			Timber4(e.width, e.from->p.x, e.from->p.y, e.to->p.x, e.to->p.y);
+			Objects::timber4(e.width, e.from->p.x, e.from->p.y, e.to->p.x, e.to->p.y);
 		}
 	}
 	else {
 		for(int i=bridge->nedges; i--;) {
 			Edge& e=bridge->edges[i];
 			glColor3f(0.6f,0.6f,0.6f);
-			Timber4(e.width, e.from->b.x, e.from->b.y, e.to->b.x, e.to->b.y);
+			Objects::timber4(e.width, e.from->b.x, e.from->b.y, e.to->b.x, e.to->b.y);
 		}
 		if(bridge->tEdge) {
 			glColor3f(0.4f,0.4f,0.4f);
-			Timber4(bridge->tEdge->width,bridge->tEdge->from->b.x, bridge->tEdge->from->b.y,bridge->tEdge->to->b.x,bridge->tEdge->to->b.y);
+			Objects::timber4(bridge->tEdge->width,bridge->tEdge->from->b.x, bridge->tEdge->from->b.y,bridge->tEdge->to->b.x,bridge->tEdge->to->b.y);
 		}
 		if(recycleState)
 			glColor3f(0.2f,0.2f,0.2f);
@@ -520,12 +298,12 @@ void Draw (void)
 			else
 				glColor3f(1.0f,1.0f,1.0f);
 		}
-		square(3.2,0,-13);
+		Objects::square(3.2,0,-13);
 		if(!recyclingMode)
 			glColor3f(0.190196f,0.67255f,0.98627f);
 			//glColor3f(0.090196f,0.57255f,0.88627f); from image
-		upButton(1.2,22,-11,1);
-		upButton(1.2,22,-13,-1);
+		Objects::upButton(1.2,22,-11,1);
+		Objects::upButton(1.2,22,-13,-1);
 //		ncol(0.1,0.8,17,-11, true, true, true, true, true, true, true);
 //		drawDigit(0.1,0.8,11,-11,0);
 		Number::drawNumber(0.1,0.8,10,-12,thickness,4);
@@ -543,7 +321,7 @@ void Draw (void)
 		nbeam(0.3,0.8,21,-11,1,false);*/
 		for(int i=level->amountOfFix; i--;) {
 			glColor3f(0.1f,0.1f,1.0f);
-			Timber4(0.2f,level->fixPositions[i].x-0.10f,level->fixPositions[i].y,level->fixPositions[i].x+0.10f,level->fixPositions[i].y);
+			Objects::timber4(0.2f,level->fixPositions[i].x-0.10f,level->fixPositions[i].y,level->fixPositions[i].x+0.10f,level->fixPositions[i].y);
 //			std::cout<< level->fixPositions[i].x-0.05f << "  "<<level->fixPositions[i].y <<"  "<< level->fixPositions[i].x+0.05f << "  "<< level->fixPositions[i].y <<"\n";
 		}
 	}
@@ -587,16 +365,16 @@ void DrawS() {
 //			glPopName(); glPopName(); glPopName(); glPopName();
 		    glPushName((unsigned int) e.from->b.x + 24); glPushName((unsigned int) e.from->b.y + 13); glPushName((unsigned int) e.to->b.x + 24); glPushName((unsigned int) e.to->b.y + 13);
 			glColor3f(0.6f,0.6f,0.6f);
-			Timber4(e.width, e.from->b.x, e.from->b.y, e.to->b.x, e.to->b.y);
+			Objects::timber4(e.width, e.from->b.x, e.from->b.y, e.to->b.x, e.to->b.y);
 			glPopName(); glPopName(); glPopName(); glPopName();
 		}
 //		glPopName(); glPopName(); glPopName(); glPopName();
 	} else {
-		gridS();
+		Objects::gridS();
 	}
-	square(2.7,0,-13);
-	upButton(0.8,22,-11,1);
-    upButton(0.8,22,-13,-1);
+	Objects::square(2.7,0,-13);
+	Objects::upButton(0.8,22,-11,1);
+    Objects::upButton(0.8,22,-13,-1);
 
 	glPopMatrix();													// NEW: Unapply Dynamic Transform
 

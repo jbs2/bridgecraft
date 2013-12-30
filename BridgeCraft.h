@@ -22,6 +22,7 @@
 
 #include "Number.h"
 #include "Textures.h"
+#include "Objects.h"
 
 #ifndef CDS_FULLSCREEN                                              // CDS_FULLSCREEN Is Not Defined By Some
 #define CDS_FULLSCREEN 4                                            // Compilers. By Defining It This Way,
@@ -56,8 +57,6 @@ short thicknessClickCounter=0;	// avoid long press issue
 
 // User Defined Variables
 GLUquadricObj *quadratic;                                           // Used For Our Quadric
-
-const float PI2 = 2.0*3.1415926535f;                                // PI Squared
 
 Matrix4fT   Transform   = {  1.0f,  0.0f,  0.0f,  0.0f,             // NEW: Final Transform
                              0.0f,  1.0f,  0.0f,  0.0f,
