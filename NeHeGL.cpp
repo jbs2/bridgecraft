@@ -276,7 +276,7 @@ int main( int argc, char *argv[] ) {
 					break;
 				case KeyRelease:
 					key = XLookupKeysym( &event.xkey, 0 );
-					printf("\nhello world %lu\n",key);	fflush(stdout);
+//					printf("\nhello world %lu\n",key);	fflush(stdout);
 					if(key<256)
 						window.keys->keyDown[key] = false;
 					break;
